@@ -1,0 +1,9 @@
+version: "3"
+services:
+  rabbitmq-kafka:
+    image: ${DOCKER_IMAGE}:${GIT_BRANCH_LOWERCASE}
+    networks:
+      - regress
+networks:
+  regress:
+    external: true

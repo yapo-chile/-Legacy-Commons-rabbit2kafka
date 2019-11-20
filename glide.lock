@@ -1,0 +1,40 @@
+hash: 35a63a3422caa7f8fcfc5531717603b79a3aaaea6a9adc528ef5b9be31b2234c
+updated: 2018-03-12T14:18:24.321817-03:00
+imports:
+- name: github.com/davecgh/go-spew
+  version: db69d09d2c587e9b9677f991dfcab1fc24d9086e
+  subpackages:
+  - spew
+- name: github.com/eapache/go-resiliency
+  version: ef9aaa7ea8bd2448429af1a77cf41b2b3b34bdd6
+  subpackages:
+  - breaker
+- name: github.com/eapache/go-xerial-snappy
+  version: bb955e01b9346ac19dc29eb16586c90ded99a98c
+- name: github.com/eapache/queue
+  version: 093482f3f8ce946c05bcba64badd2c82369e084d
+- name: github.com/golang/snappy
+  version: 553a641470496b2327abcac10b36396bd98e45c9
+- name: github.com/pierrec/lz4
+  version: ed8d4cc3b461464e69798080a0092bd028910298
+- name: github.com/pierrec/xxHash
+  version: a0006b13c722f7f12368c00a3d3c2ae8a999a0c6
+  subpackages:
+  - xxHash32
+- name: github.com/rcrowley/go-metrics
+  version: 8732c616f52954686704c8645fe1a9d59e9df7c1
+- name: github.com/streadway/amqp
+  version: 54ded0531dfd699a7893861d39a7a949c5749bc9
+- name: github.com/Yapo/logger
+  version: 91855e974718b8c68dd00e63817568f1f512a4cc
+- name: gopkg.in/Shopify/sarama.v1
+  version: f7be6aa2bc7b2e38edf816b08b582782194a1c02
+testImports:
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
+- name: gopkg.in/stretchr/testify.v1
+  version: 12b6f73e6084dad08a7c6e575284b177ecafbc71
+  subpackages:
+  - assert

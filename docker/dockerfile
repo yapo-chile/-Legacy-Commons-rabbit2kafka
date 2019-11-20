@@ -1,0 +1,26 @@
+FROM alpine:latest
+
+ARG GIT_COMMIT
+ARG GIT_BRANCH
+ARG BUILD_CREATOR
+ARG APPNAME
+ARG VERSION
+ARG BINARY
+
+ENV EXEC ./$BINARY
+ENV MODE DOCKER
+ENV APP_VERSION $VERSION
+
+RUN apk update && apk add --no-cache ca-certificates
+WORKDIR /home/user/app/
+
+LABEL branch=$GIT_BRANCH \
+   commit=$GIT_COMMIT \
+   build-creator=$BUILD_CREATOR \
+   appname=$APPNAME \
+   version=$VERSION
+
+COPY ${BINARY} .
+RUN touch $GIT_COMMIT 
+
+CMD $EXEC
