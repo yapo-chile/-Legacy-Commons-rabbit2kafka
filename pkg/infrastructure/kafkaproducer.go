@@ -52,7 +52,7 @@ func (k KafkaProducer) Close() error {
 func (k KafkaProducer) SendMessage(topic string, message string) error {
 	// We are not setting a message key, which means that all messages will
 	// be distributed randomly over the different partitions.
-	_, _, err := k.producer.SendMessage(&sarama.ProducerMessage{
+	partition, offset, err := k.producer.SendMessage(&sarama.ProducerMessage{
 		Topic: topic,
 		Key:   sarama.StringEncoder("1"),
 		Value: sarama.StringEncoder(message),
@@ -63,7 +63,7 @@ func (k KafkaProducer) SendMessage(topic string, message string) error {
 	} else {
 		// The tuple (topic, partition, offset) can be used as a unique identifier
 		// for a message in a Kafka cluster.
-		// logger.Info("message sent with unique identifier %s/%d/%d", topic, partition, offset)
+		logger.Info("message sent with unique identifier %s/%d/%d", topic, partition, offset)
 	}
 	return err
 }
