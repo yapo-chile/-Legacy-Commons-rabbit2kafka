@@ -34,7 +34,7 @@ export KAFKA_PORT=9093
 export KAFKA_TOPIC=events_queue
 
 #DOCKER variables
-export DOCKER_REGISTRY=containers.schibsted.io
+export DOCKER_REGISTRY=containers.mpi-internal.com
 export DOCKER_IMAGE=${DOCKER_REGISTRY}/yapo/${APPNAME}
 export DOCKER_BINARY=${APPNAME}.docker
 export DOCKER_RABBITMQ_HOST=rabbit
