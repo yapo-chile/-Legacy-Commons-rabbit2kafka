@@ -5,6 +5,29 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 . "$DIR/colors.sh"
 
+########### DYNAMIC VARS ###############
+
+#In case we are in travis, docker tag will be "branch_name-20180101-1200". In case of master branch, branch_name is blank.
+#In case of local build (not in travis) tag will be "local".
+
+if [[ -n "$TRAVIS" ]]; then
+    if [ "${GIT_BRANCH}" != "master" ]; then
+        DOCKER_TAG=$(echo ${GIT_BRANCH} | tr '[:upper:]' '[:lower:]' | sed 's,/,_,g')
+    else
+        DOCKER_TAG=$(TZ=UTC git show --quiet --date='format-local:%Y%m%d_%H%M%S' --format="%cd")
+    fi
+else
+    DOCKER_TAG=local
+fi
+
+#In case we are in travis, we will use cached docker environment.
+if [[ -n "$TRAVIS" ]]; then
+    DOCKER_COMMAND=container_cache
+else
+    DOCKER_COMMAND=docker
+fi
+
+########### CODE ##############
 #Build code again now for docker platform
 echoHeader "Building code for docker platform"
 set -e
@@ -37,17 +60,10 @@ echo "GIT COMMIT SHORT: ${GIT_COMMIT_SHORT}"
 echo "BUILD CREATOR: ${BUILD_CREATOR}"
 echo "BUILD NAME: ${DOCKER_IMAGE}:${GIT_COMMIT_SHORT}"
 
-export GIT_BRANCH_LOWERCASE=$(echo "${GIT_BRANCH}" | awk '{print tolower($0)}'| sed 's/\//_/;')
-DOCKER_ARGS=" "
-if [[ "$GIT_TAG" != "" && "$GIT_BRANCH_LOWERCASE" == "master" ]]; then
-    DOCKER_ARGS="${DOCKER_ARGS} \
-        -t ${DOCKER_IMAGE}:${GIT_TAG}"
-else
-    DOCKER_ARGS="${DOCKER_ARGS} \
-        -t ${DOCKER_IMAGE}:${GIT_BRANCH_LOWERCASE}"
-fi
-DOCKER_ARGS=" ${DOCKER_ARGS} \
-    --build-arg GIT_BRANCH="$GIT_BRANCH" \
+
+DOCKER_ARGS=" \
+	-t ${DOCKER_IMAGE}:${DOCKER_TAG} \
+	--build-arg GIT_BRANCH="$GIT_BRANCH" \
     --build-arg GIT_COMMIT="$GIT_COMMIT" \
     --build-arg BUILD_CREATOR="$BUILD_CREATOR" \
     --build-arg VERSION="$APP_VERSION" \
@@ -58,7 +74,7 @@ DOCKER_ARGS=" ${DOCKER_ARGS} \
 
 echo "args: ${DOCKER_ARGS}"
 set -x
-docker build ${DOCKER_ARGS}
+${DOCKER_COMMAND} build ${DOCKER_ARGS}
 set +x
 
 echoTitle "Build done"
