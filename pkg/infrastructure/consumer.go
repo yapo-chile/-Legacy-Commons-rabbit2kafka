@@ -26,16 +26,18 @@ func (r RabbitMQDelivery) Remove(remove bool) {
 
 //Consumer represents a connection that receives the messages
 type Consumer struct {
-	QueueData   interfaces.QueueData
-	ConsumerTag string
-	Exchange    string
-	reader      domain.Reader
-	Connection  *amqp.Connection
-	Queue       amqp.Queue
-	Channel     *amqp.Channel
-	Done        chan error
-	closeError  chan *amqp.Error
-	connected   bool
+	QueueData    interfaces.QueueData
+	ConsumerTag  string
+	VHost        string
+	Exchange     string
+	ExchangeType string
+	reader       domain.Reader
+	Connection   *amqp.Connection
+	Queue        amqp.Queue
+	Channel      *amqp.Channel
+	Done         chan error
+	closeError   chan *amqp.Error
+	connected    bool
 }
 
 //RecoverIntervalTime interval between reconnection tries
@@ -49,7 +51,9 @@ func NewConsumer(
 	username string,
 	password string,
 	consumerTag string,
+	vhost string,
 	exchange string,
+	exchangeType string,
 ) interfaces.StorageHandler {
 	consumer := new(Consumer)
 	queue := new(interfaces.QueueData)
@@ -60,7 +64,9 @@ func NewConsumer(
 	queue.Password = password
 	consumer.QueueData = *queue
 	consumer.ConsumerTag = consumerTag
+	consumer.VHost = vhost
 	consumer.Exchange = exchange
+	consumer.ExchangeType = exchangeType
 	consumer.Done = make(chan error)
 	consumer.closeError = make(chan *amqp.Error)
 
@@ -76,7 +82,7 @@ func (c *Consumer) SetReader(reader domain.Reader) {
 //Connect connects the consumer to RabbitMQ
 func (c *Consumer) Connect() {
 	connectionURL := fmt.Sprintf(
-		"amqp://%s:%s@%s:%s/",
+		"amqp://%s:%s@%s:%s/"+c.VHost,
 		c.QueueData.Username,
 		c.QueueData.Password,
 		c.QueueData.Host,
@@ -101,13 +107,13 @@ func (c *Consumer) Connect() {
 
 	c.Channel = ch
 	err = ch.ExchangeDeclare(
-		c.Exchange, // name
-		"fanout",   // type
-		true,       // durable
-		false,      // auto-deleted
-		false,      // internal
-		false,      // no-wait
-		nil,        // arguments
+		c.Exchange,     // name
+		c.ExchangeType, // type
+		true,           // durable
+		false,          // auto-deleted
+		false,          // internal
+		false,          // no-wait
+		nil,            // arguments
 	)
 	if failOnError(err, "Failed to declare an exchange") {
 		return
@@ -175,6 +181,7 @@ func (c *Consumer) RunOnce() {
 }
 
 func (c *Consumer) processMessages(deliveries <-chan amqp.Delivery) {
+	logger.Info("worker: started")
 	for d := range deliveries {
 		delivery := RabbitMQDelivery(d)
 		c.reader(delivery)

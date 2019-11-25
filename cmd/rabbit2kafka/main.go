@@ -48,7 +48,9 @@ func main() {
 		conf.RabbitMQConf.User,
 		conf.RabbitMQConf.Password,
 		conf.RabbitMQConf.ConsumerTag,
+		conf.RabbitMQConf.VHost,
 		conf.RabbitMQConf.Exchange,
+		conf.RabbitMQConf.ExchangeType,
 	)
 	storageRepo := interfaces.NewStorageRepo(c)
 	messageRepo := interfaces.NewMessageRepo(k)
