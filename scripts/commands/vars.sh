@@ -25,14 +25,9 @@ export LOGGER_SYSLOG_ENABLED=false
 export LOGGER_STDLOG_ENABLED=true
 export LOGGER_LOG_LEVEL=0
 
-export RABBITMQ_HOST=localhost
-export RABBITMQ_PORT=5672
-export RABBITMQ_QUEUE=backend_event
-export RABBITMQ_EXCHANGE=/
-
-export KAFKA_HOST=localhost
-export KAFKA_PORT=9093
-export KAFKA_TOPIC=events_queue
+export RABBITMQ_HOST=172.21.10.240
+export KAFKA_HOST=172.21.1.95
+export KAFKA_TOPIC=dev01-events-queue
 
 #DOCKER variables
 export DOCKER_REGISTRY=containers.mpi-internal.com

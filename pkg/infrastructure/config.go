@@ -23,13 +23,15 @@ type LoggerConf struct {
 
 //RabbitMQConf conf for a RabbitMQ Consumer
 type RabbitMQConf struct {
-	Host        string `env:"HOST" envDefault:"rabbit"`
-	Port        string `env:"PORT" envDefault:"5672"`
-	Queue       string `env:"QUEUE" envDefault:"backend_event`
-	Exchange    string `env:"EXCHANGE" envDefault:"/`
-	User        string `env:"USER" envDefault:"guest"`
-	Password    string `env:"PASSWORD" envDefault:"guest"`
-	ConsumerTag string `env:"CONSUMER_TAG"`
+	Host         string `env:"HOST" envDefault:"rabbit"`
+	Port         string `env:"PORT" envDefault:"5672"`
+	Queue        string `env:"QUEUE" envDefault:"backend_event"`
+	VHost        string `env:"VHOST" envDefault:"backend_event"`
+	Exchange     string `env:"EXCHANGE" envDefault:"backend_event"`
+	ExchangeType string `env:"EXCHANGE_TYPE" envDefault:"topic"`
+	User         string `env:"USER" envDefault:"yapo"`
+	Password     string `env:"PASSWORD" envDefault:"yapo2014"`
+	ConsumerTag  string `env:"CONSUMER_TAG"`
 }
 
 //KafkaConf conf for a Kafka SyncProducer
