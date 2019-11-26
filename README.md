@@ -2,9 +2,6 @@
 
 rabbit2kafka  is a microservice on golang for Yapo to move message from a RabbitMQ queue binded to an exchange to Kafka with a given topic
 
-<!-- Badger start badges -->
-[![Status of the build](https://badger.spt-engprod-pro.mpi-internal.com/badge/travis/Yapo/rabbit2kafka)](https://travis.mpi-internal.com/Yapo/rabbit2kafka)
-<!-- Badger end badges -->
 
 ## How to run the service
 
@@ -49,4 +46,25 @@ rabbit2kafka  is a microservice on golang for Yapo to move message from a Rabbit
 * To attach to the running Docker image
 
   `make docker-attach`
+  
+  ## Available vars
+
+|Variable               |Default       |Description                |
+|-----------------------|--------------|---------------------------|
+|KAFKA_HOST             |kafka         |Broker host                |
+|KAFKA_TOPIC            |events-queue  |Topic to send messages     |
+|KAFKA_PORT             |9092          |Broker port                |
+|RABBITMQ_HOST          |rabbit        |Rabbit host                |
+|RABBITMQ_PORT          |5672          |Rabbit port                |
+|RABBITMQ_QUEUE         |backend_event |Queue with message to read |
+|RABBITMQ_VHOST         |backend_event |Virtual host to connect    |
+|RABBITMQ_EXCHANGE      |backend_event |Distibute the messages     |
+|RABBITMQ_EXCHANGE_TYPE |topic         |Type of distribution       |
+|RABBITMQ_USER          |yapo          |User to connect            |
+|RABBITMQ_PASSWORD      |yapo2014      |Password of the user       |
+|RABBITMQ_CONSUMER_TAG  |              |Id for consumer client     |
+|LOGGER_SYSLOG_ENABLED  |false         |System log on/off          |
+|LOGGER_SYSLOG_IDENTITY |              |Identify this ms           |
+|LOGGER_STDLOG_ENABLED  |true          |Standar log on/off         |
+|LOGGER_LOG_LEVEL       |0             |Level of log (0 = debug)   |
 
