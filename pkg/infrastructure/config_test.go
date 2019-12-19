@@ -1,52 +1,51 @@
 package infrastructure
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
-	"gopkg.in/stretchr/testify.v1/assert"
+	"github.com/stretchr/testify/assert"
 )
 
+type Nested struct {
+	F bool `env:"LE_F"`
+}
+
+type TestConf struct {
+	I  int    `env:"LE_I"`
+	S  string `env:"LE_S"`
+	F  string `env:"FROM_FILE"`
+	N  Nested `env:"NESTED_"`
+	D  string `env:"DEF" envDefault:"default_conf"`
+	OF string `env:"OTHERFILE"`
+}
+
 func TestConfigLoad(t *testing.T) {
-	configVariables := []string{
-		"RABBITMQ_HOST",
-		"RABBITMQ_PORT",
-		"RABBITMQ_QUEUE",
-		"RABBITMQ_EXCHANGE",
-		"LOGGER_SYSLOG_ENABLED",
-		"LOGGER_SYSLOG_IDENTITY",
-		"LOGGER_STDLOG_ENABLED",
-		"LOGGER_LOG_LEVEL",
-		"KAFKA_HOST",
-		"KAFKA_PORT",
-		"KAFKA_TOPIC",
+	env := map[string]string{
+		"LE_I":           "42",
+		"LE_S":           "Don't panic",
+		"NESTED_LE_F":    "true",
+		"FROM_FILE":      "fullhd",
+		"OTHERFILE_FILE": "testdata/not.data",
 	}
-	storedValues := make([]string, len(configVariables))
-	testConfigVariables := []string{
-		"localhost",
-		"3785",
-		"test_queue",
-		"test_exchange",
-		"true",
-		"test_log",
-		"true",
-		"1",
-		"test-kafka",
-		"9092",
-		"test-topic",
+	// Setup environment
+	for k, v := range env {
+		os.Setenv(k, v)
+		defer os.Unsetenv(k)
 	}
-	//store the environ variables and set the desired values
-	for index, variable := range configVariables {
-		storedValues[index] = os.Getenv(variable)
-		os.Setenv(variable, testConfigVariables[index])
+
+	var conf TestConf
+	LoadFromEnv(&conf)
+
+	expected := TestConf{
+		I: 42,
+		S: "Don't panic",
+		F: "fullhd",
+		N: Nested{
+			F: true,
+		},
+		D: "default_conf",
 	}
-	//Load the test enviroment
-	c := LoadConfig()
-	for index, variable := range configVariables {
-		os.Setenv(variable, storedValues[index])
-	}
-	//Validate the load
-	assert.Equal(t, fmt.Sprintf("%+v", c), `&{LoggerConf:{SyslogEnabled:true SyslogIdentity:test_log StdlogEnabled:true LogLevel:1} RabbitMQConf:{Host:localhost Port:3785 Queue:test_queue Exchange:test_exchange} KafkaConf:{Host:test-kafka Port:9092 Topic:test-topic}}`)
-	assert.Equal(t, c.KafkaConf.GetBroker(), `test-kafka:9092`)
+
+	assert.Equal(t, expected, conf)
 }
