@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -15,9 +16,13 @@ var config infrastructure.Config
 
 func main() {
 	fmt.Println("Loading config")
-	conf := infrastructure.LoadConfig()
-	config = *conf
-	fmt.Printf("Loaded Config: %+v\n", conf)
+	var conf infrastructure.Config
+	infrastructure.LoadFromEnv(&conf)
+	if jconf, err := json.MarshalIndent(conf, "", "    "); err == nil {
+		fmt.Printf("Config: \n%s\n", jconf)
+	} else {
+		fmt.Printf("Config: \n%+v\n", conf)
+	}
 	fmt.Println("Setting up logger")
 	loggerConf := logger.LogConfig{
 		Syslog: logger.SyslogConfig{
