@@ -12,7 +12,6 @@ import (
 )
 
 var kafkaProducer infrastructure.KafkaProducer
-var config infrastructure.Config
 
 func main() {
 	fmt.Println("Loading config")
@@ -59,7 +58,7 @@ func main() {
 	)
 	storageRepo := interfaces.NewStorageRepo(c)
 	messageRepo := interfaces.NewMessageRepo(k)
-	messageRepo.Topic = config.KafkaConf.Topic
+	messageRepo.Topic = conf.KafkaConf.Topic
 	messageTransfer := usecases.NewMessageTransfer(storageRepo, messageRepo)
 	messageTransfer.StartReader(false)
 }
