@@ -88,6 +88,14 @@ func (c *Consumer) Connect() {
 		c.QueueData.Host,
 		c.QueueData.Port,
 	)
+	if c.QueueData.Username == "" && c.QueueData.Password == "" {
+		connectionURL = fmt.Sprintf(
+			"amqp://%s:%s/",
+			c.QueueData.Host,
+			c.QueueData.Port,
+		)
+	}
+
 	conn, err := amqp.Dial(connectionURL)
 	for err != nil {
 		failOnError(err, "Failed to connect to RabbitMQ")
