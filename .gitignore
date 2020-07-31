@@ -1,5 +1,4 @@
 logs/*
 vendor/*
 reports/*
-rabbit2kafka
 rabbit2kafka.docker
