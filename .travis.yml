@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 os: trusty
 language: go
 
@@ -32,12 +32,6 @@ install:
 # in a modern Go project.
 script:
 - make validate
-
-after_failure:
-  - reports-publisher
-
-after_success:
-  - reports-publisher
 
 deploy:
   - provider: script
