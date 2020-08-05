@@ -6,7 +6,7 @@ services:
   - docker
 
 go:
-  - 1.13
+  - 1.9
   - master
 
 matrix:
@@ -30,8 +30,8 @@ install:
 
 # script always run to completion (set +e). All of these code checks are must haves
 # in a modern Go project.
-script:
-  - make validate
+#script:
+#- make validate
 
 after_failure:
   - reports-publisher
