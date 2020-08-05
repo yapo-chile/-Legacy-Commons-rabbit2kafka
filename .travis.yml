@@ -20,11 +20,12 @@ install:
 
 # script always run to completion (set +e). All of these code checks are must haves
 # in a modern Go project.
-script: skip
+script:
+  - make docker-build
 
 deploy:
   - provider: script
-    script: make docker-build docker-publish
+    script: make docker-publish
     on:
       all_branches: true
       condition: $TRAVIS_PULL_REQUEST = false
