@@ -46,9 +46,6 @@ docker-compose-up-dev:
 docker-compose-down-dev:
 	@scripts/commands/docker-compose-down.sh dev
 
-validate:
-	@scripts/commands/validate.sh
-
 fix-format:
 	@scripts/commands/fix-format.sh
 

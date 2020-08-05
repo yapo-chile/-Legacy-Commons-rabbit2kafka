@@ -30,8 +30,7 @@ install:
 
 # script always run to completion (set +e). All of these code checks are must haves
 # in a modern Go project.
-script:
-- make validate
+script: skip
 
 deploy:
   - provider: script
