@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 os: trusty
 language: go
 
