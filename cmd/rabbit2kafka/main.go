@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-
 	"github.com/Yapo/logger"
 	"github.mpi-internal.com/Yapo/rabbit2kafka/pkg/infrastructure"
 	"github.mpi-internal.com/Yapo/rabbit2kafka/pkg/interfaces"
