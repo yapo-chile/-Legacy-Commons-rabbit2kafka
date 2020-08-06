@@ -27,10 +27,6 @@ rabbit2kafka  is a microservice on golang for Yapo to move message from a Rabbit
 
   `make start`
 
-* How to check format
-
-  `make validate`
-
 * To create the Docker image
 
   `make docker-build`
